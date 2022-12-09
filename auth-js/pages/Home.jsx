@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { useHistory } from 'react-router-dom';
 import { useRouter } from 'next/router'
+import firebaseConfig from '../secret/FBSdk.json';
 
 
 const app = initializeApp(firebaseConfig);

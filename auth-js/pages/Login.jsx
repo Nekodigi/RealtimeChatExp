@@ -2,15 +2,13 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { initializeApp } from 'firebase/app';
 import { useState } from 'react';
 import firebaseConfig from '../secret/FBSdk.json';
-import { useAuthContext } from '../context/AuthContext';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const SignUp = () => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { user } = useAuthContext();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,7 +24,7 @@ const SignUp = () => {
 
   return (
     <div>
-      <h1>ログイン {user.email}</h1>
+      <h1>ログイン</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>メールアドレス</label>
@@ -54,4 +52,6 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+Login.is_public = true;
+
+export default Login;

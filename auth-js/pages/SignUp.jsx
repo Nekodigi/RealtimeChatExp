@@ -2,15 +2,15 @@ import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { useState } from 'react';
 import firebaseConfig from '../secret/FBSdk.json';
-import { useAuthContext } from '../context/AuthContext';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const SignUp = () => {
+  //const { user } = useAuthContext();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { user } = useAuthContext();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,10 +23,10 @@ const SignUp = () => {
   const handleChangePassword = (event) => {
     setPassword(event.currentTarget.value);
   };
-
+//{user.email}
   return (
     <div>
-      <h1>ユーザ登録 {user.email}</h1>
+      <h1>ユーザ登録 </h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>メールアドレス</label>
@@ -53,5 +53,7 @@ const SignUp = () => {
     </div>
   );
 };
+
+SignUp.is_public = true;
 
 export default SignUp;
