@@ -1,5 +1,6 @@
 
-exports.randomDocId = () => {
+
+export function randomDocId() {
     return randomID(20);
 }
 
