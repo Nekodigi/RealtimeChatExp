@@ -1,7 +1,7 @@
 
 
-export function randomDocId() {
-    return randomID(20);
+exports.randomDocId = () =>{
+    return randomID(7);
 }
 
 const randomID = (length) => {

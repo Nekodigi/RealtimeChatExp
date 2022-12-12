@@ -10,7 +10,7 @@ import JoinChat from './joinChat';
 export default function Header(){
     
   return (
-      <AppBar position="static">
+      <AppBar >
       <Toolbar>
         <IconButton
           size="large"

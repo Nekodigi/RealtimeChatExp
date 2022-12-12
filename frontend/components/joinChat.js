@@ -1,9 +1,12 @@
 import { Box, Button, Modal, Paper, TextField, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 
 export default function JoinChat(){
   const [open, setOpen] = useState(false);
+  const [id, setId] = useState("");
+  const router = useRouter();
     
   const style = {
     position: 'absolute',
@@ -29,8 +32,8 @@ export default function JoinChat(){
           <Typography id="modal-modal-title" variant="h6" component="h2" gutterBottom>
               チャットに参加
           </Typography>
-          <TextField fullWidth id="outlined-basic" label="IDを入力" variant="outlined" margin="normal"/>
-          <Box display="flex" justifyContent="flex-end"><Button >JOIN</Button></Box>
+          <TextField fullWidth id="outlined-basic" label="IDを入力" value={id} onChange={(e) => setId(e.target.value)} variant="outlined" margin="normal"/>
+          <Box display="flex" justifyContent="flex-end"><Button onClick={() => {setOpen(false);router.push(`/chat/${id}`);}}>JOIN</Button></Box>
           </Paper>
           {/* </Box> */}
         </Modal>
