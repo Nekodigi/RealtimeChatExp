@@ -5,12 +5,21 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import JoinChat from './joinChat';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Container } from '@mui/material';
 
 
 export default function Header(){
+  const appBarRef = useRef();
+  const [appBarPB, setAppBarPB] = useState(0);
+
+  useEffect(() => {
+    setAppBarPB(appBarRef.current.clientHeight/8);
+  }, [appBarRef])
     
   return (
-      <AppBar >
+    <div>
+      <AppBar ref={appBarRef}>
       <Toolbar>
         <IconButton
           size="large"
@@ -28,5 +37,7 @@ export default function Header(){
         <Button color="inherit">Create New</Button>
       </Toolbar>
     </AppBar>
+    <Container className="header spacer" sx={{pb:appBarPB}} ></Container>
+    </div>
   )
 }
