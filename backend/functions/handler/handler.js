@@ -7,6 +7,8 @@ const os = require('os');
 
 const app = express();
 
+
+
 app.use(cors());//function should be called from client
 
 

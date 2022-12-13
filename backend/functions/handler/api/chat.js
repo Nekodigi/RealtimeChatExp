@@ -11,6 +11,7 @@ const path = require('path');
 
 
 const { randomFillSync } = require('crypto');
+const { envVar } = require("../../utils/var");
 
 const random = (() => {
     const buf = Buffer.alloc(16);
@@ -18,41 +19,61 @@ const random = (() => {
   })();
 
 exports.add = async(req, res) => {
-  let id = req.params.id;
   let files = [];
+  let body = {};
 
-  const bb = busboy({ headers: req.headers, limits:{fileSize:1000*1000*10} });
+  const bb = busboy({ headers: req.headers, limits:{fileSize:1024*1024*10} });
   bb.on('file', (name, file, info) => {
-    const saveTo = path.join(os.tmpdir(), `${info.filename}`);//os.tmpdir()  `busboy-upload-${random()}`
+    console.log(name, file, info)
+    const filename = decodeURIComponent(info.filename);
+    const saveTo = path.join(os.tmpdir(), `${filename}`);//os.tmpdir()  `busboy-upload-${random()}`
     var m = meter();
-
-    file.pipe(m).pipe(fs.createWriteStream(saveTo)).on('close', () => {files.push({saveTo, name:info.filename, size:m.bytes})});
-    files.push({saveTo, name:info.filename})
+    
+    file.pipe(m).pipe(fs.createWriteStream(saveTo));
+    file.on('end', () => {files.push({path:saveTo, name:filename, size:m.bytes})});
+    file.on('limit', function() {
+      res.writeHead(413, { 'Connection': 'close' });
+      res.end(`file size limit exceeded`);
+    });
+    
   });
-  bb.on('finish', () => {
+  bb.on('field', (name, val, info) => {
+    body[name] = val;
+  });
+  bb.on('finish', async () => {
     //do something here!
-
     console.log(files);
+    req.body = body;
+    let status = await addChatWithFile(req, files);
+    
+    console.log(status);
     res.writeHead(200, { 'Connection': 'close' });
-    res.end(`That's all folks!`);
+    res.end(status);
   });
-  return req.pipe(bb);
+  console.log(envVar.isDev);
+  if(envVar.isDev){
+    req.pipe(bb);
+  }else{
+    bb.end(req.rawBody);
+  }
+  
 }
 
-const addChatWithFile = async (files) => {
-  let msgs = db.collection("chats").doc(id).collection("msgs");
+const addChatWithFile = async (req, files) => {
+  let msgs = db.collection("chats").doc(req.params.id).collection("msgs");
   let msgId = randomDocId();
   let totalSize = files.reduce((accum, file) => accum+file.size, 0);
   console.log(totalSize);
-  if(totalSize > 1000*1000*10){res.send("size limit exceeded"); return;}
-
-  let fileURLs = await Promise.all(req.files.map(async file => {
-      let path = `chats/${id}/${msgId}/${file.originalname}`
+  if(totalSize > 1024*1024*10){return "size limit exceeded";}
+  let fileURLs = await Promise.all(files.map(async file => {
+      let path = `chats/${req.params.id}/${msgId}/${file.name}`
+      console.log(path, file.path)
       await uploadFile(file.path, path);
       let url = await getUrl(path);
       return url;
   }));
-  console.log(fileURLs);
+  //console.log(fileURLs);
+  //console.log(req.body)
   let msgData = {
       id:msgId,
       created:new Date(),
@@ -60,8 +81,9 @@ const addChatWithFile = async (files) => {
       text:req.body.title,
       files:fileURLs
   }
+  //console.log(msgData)
   msgs.doc(msgId).set(msgData);
-res.send(msgId);
+  return "upload completed";
 }
 
 exports.create = async (req, res) => {

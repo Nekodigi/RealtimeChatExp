@@ -27,7 +27,8 @@ export default function ChatInput({id, inputBoxRef}){
     setText("");
     setFiles([]);
     console.log(process.env.NEXT_PUBLIC_API_URL);
-    const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/add/${id}`, form);
+    const config = { headers: { 'content-type': `multipart/form-data; ` }};
+    const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/add/${id}`, form, config);
     console.log(resp.data);
   }
 
