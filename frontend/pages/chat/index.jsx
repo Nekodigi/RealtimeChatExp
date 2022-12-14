@@ -56,8 +56,8 @@ export default function ChatPage(){
 
   return (
     <div>
-      <Container maxWidth="sm" sx={{pb:chatMB}}>
-        <h1>CHAT {router.query.id}</h1>
+      <Container maxWidth="sm" sx={{pb:chatMB, pt:4}} >
+        {/* <h1>CHAT {router.query.id}</h1> */}
         <Box display="flex" flexDirection="column" gap={2}>
           {msgs.map((msg, i) => <Msg key={i} msg={msg} />)}
         </Box>

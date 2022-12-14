@@ -1,4 +1,5 @@
-import { Box, Button, Modal, Paper, TextField, Tooltip, Typography } from "@mui/material";
+import { PersonAddAltRounded } from "@mui/icons-material";
+import { Box, Button, IconButton, Modal, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import QRCode from 'react-qr-code';
@@ -22,7 +23,8 @@ export default function InviteChat(){
   
   return (
     <div>
-      <Button onClick={() => setOpen(true)} color="inherit">Invite Chat</Button>
+      {/* Invite Chat */}
+      <IconButton onClick={() => setOpen(true)} color="inherit"><PersonAddAltRounded /></IconButton>
       <Modal
           open={open}
           onClose={() => setOpen(false)}
@@ -38,7 +40,7 @@ export default function InviteChat(){
           <TextField fullWidth id="outlined-basic" label="IDをコピー" value={router.query.id} onChange={(e) => setId(e.target.value)} variant="outlined" margin="normal" 
           InputProps={{readOnly:true}} onClick={() => {navigator.clipboard.writeText(router.query.id); setCopyMsg("Copied!");}}/>
           </Tooltip>
-          <p>{typeof window !== "undefined" ? window.location.href : ""}</p>
+          {/* <p>{typeof window !== "undefined" ? window.location.href : ""}</p> */}
           <Box sx={{ m: 4 }}><QRCode style={{width:"100%", height:"100%"}} value={typeof window !== "undefined" ? window.location.href : ""} /></Box>
           {/* <Box display="flex" justifyContent="flex-end"><Button onClick={() => {setOpen(false);router.push(`/chat?id=${id}`);}}>JOIN</Button></Box> */}
           </Paper>

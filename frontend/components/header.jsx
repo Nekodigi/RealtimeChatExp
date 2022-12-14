@@ -8,6 +8,7 @@ import JoinChat from './joinChat';
 import { useEffect, useRef, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import InviteChat from './inviteChat';
+import NewChat from './newChat';
 
 
 export default function Header(){
@@ -22,21 +23,12 @@ export default function Header(){
     <div>
       <AppBar ref={appBarRef}>
       <Toolbar>
-        {/* <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton> */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           QR Chat
         </Typography>
         <InviteChat />
         <JoinChat />
-        <Button color="inherit">Create New</Button>
+        <NewChat />
       </Toolbar>
     </AppBar>
     <Container className="header spacer" sx={{pb:appBarPB}} ></Container>
