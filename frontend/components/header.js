@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import JoinChat from './joinChat';
 import { useEffect, useRef, useState } from 'react';
 import { Box, Container } from '@mui/material';
+import InviteChat from './inviteChat';
 
 
 export default function Header(){
@@ -21,7 +22,7 @@ export default function Header(){
     <div>
       <AppBar ref={appBarRef}>
       <Toolbar>
-        <IconButton
+        {/* <IconButton
           size="large"
           edge="start"
           color="inherit"
@@ -29,10 +30,11 @@ export default function Header(){
           sx={{ mr: 2 }}
         >
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           QR Chat
         </Typography>
+        <InviteChat />
         <JoinChat />
         <Button color="inherit">Create New</Button>
       </Toolbar>
