@@ -37,13 +37,16 @@ export default function ChatPage(){
 
     access_db();
 
-    const resizeObserver = new ResizeObserver(() => {
-      // Do what you want to do when the size of the element changes
-      setChatMB(inputBoxRef.current.clientHeight/8+2);
-      console.log(inputBoxRef.current.clientHeight);
-    });
-    resizeObserver.observe(inputBoxRef.current);
-    return () => resizeObserver.disconnect(); // clean up 
+    if(inputBoxRef.current !== null && inputBoxRef.current !== undefined){
+      console.log(inputBoxRef, inputBoxRef.current);
+      const resizeObserver = new ResizeObserver(() => {
+        // Do what you want to do when the size of the element changes
+        setChatMB(inputBoxRef.current.clientHeight/8+2);
+        console.log(inputBoxRef.current.clientHeight);
+      });
+      resizeObserver.observe(inputBoxRef.current);
+      return () => resizeObserver.disconnect(); // clean up 
+    }
   }, [router])
 
   useEffect(() => {

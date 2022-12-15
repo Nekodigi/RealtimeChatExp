@@ -1,15 +1,26 @@
 import { AttachFileRounded, InsertDriveFileRounded, SendRounded } from "@mui/icons-material";
 import { Box, Chip, Container, Divider, IconButton, Stack, TextField } from "@mui/material";
 import axios from "axios";
+import { useCallback } from "react";
 import { useEffect, useState } from "react";
-
+import { useDropzone } from "react-dropzone";
 
 export default function ChatInput({id, inputBoxRef}){
   const [files, setFiles] = useState([]);
   const [text, setText] = useState("");
+
+  const onDrop = useCallback(acceptedFiles => {
+    // Do something with the files
+    console.log("TEST");
+    console.log(acceptedFiles);
+    acceptedFiles.forEach(file => setFiles((prev) => [...prev, file]));
+  }, [])
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
   
   const addFile = (e) => {
-    console.log(e.target.files);
+    console.log(e);
 
     
     //form.append('file', e.target.files[0]);
@@ -32,9 +43,13 @@ export default function ChatInput({id, inputBoxRef}){
     console.log(resp.data);
   }
 
+  
+
   return (
-    <Container ref={inputBoxRef} maxWidth="sm"  style={{position:"fixed", bottom:0, margin:"auto", left:0, right:0, background:"#ffffff"}}>
-      <Divider />
+    <div {...getRootProps({onClick: event => event.stopPropagation()})} >
+      <input {...getInputProps()} />
+    <Container ref={inputBoxRef} maxWidth="sm"  style={{position:"fixed", bottom:0, margin:"auto", left:0, right:0, background:"#ffffff"}} >
+      <Divider  />
         <Box >
           <TextField multiline maxRows={4} fullWidth label="メッセージを入力" margin="normal" value={text} onChange={(e) => setText(e.target.value)}></TextField>
         </Box>
@@ -42,15 +57,18 @@ export default function ChatInput({id, inputBoxRef}){
         {files.map((file, i) => <Chip key={i} icon={<InsertDriveFileRounded/>} label={file.name} onDelete={() => setFiles((files) => files.filter((f) => f.name !== file.name))}/> )}
         </Box>
         <Box display="flex" justifyContent="space-between" sx={{mb:2}}>
+        
           <IconButton aria-label="attach file" component="label">
             <AttachFileRounded />
             <input hidden multiple onChange={addFile} type="file" />
           </IconButton>
-
           <IconButton aria-label="send" onClick={doSend}>
             <SendRounded />
           </IconButton>
         </Box>
-      </Container>      
+      </Container>     
+      
+      </div> 
+      
   )
 }
